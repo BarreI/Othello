@@ -1,0 +1,30 @@
+#othelloBord td{
+border: 3px solid black;
+width: 50px;
+height: 50px;
+text-align: center;
+table-layout: fixed;
+padding: 1px 1px 1px 1px;
+font-size: 33px;
+}
+
+#othelloBord {
+  border-collapse: collapse;
+  background-color: #369640;
+}
+
+.White {
+  background-color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  margin: 0 auto;
+}
+
+.Black {
+  background-color: Black;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  margin: 0 auto;
+}

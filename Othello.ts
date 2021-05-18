@@ -7,9 +7,23 @@ window.onload = function () {
     i++;
   }
 
-  let bord:HTMLElement | HTMLTableElement = document.getElementById('othelloBord')!;
+  let bord = <HTMLTableElement>document.getElementById('othelloBord')!;
+
   bordCreate();
   bordReset();
+  bordStats();
+
+  for(let x:number=0;x<8;x++){
+    for(let y:number=0;y<8;y++){
+      let clickEvent:HTMLElement = bord.rows[x].cells[y];
+      clickEvent.onclick = function(){
+        console.log(clickEvent.innerText); 
+        if(clickEvent.innerText === ""){ //divで要素を管理しているため全てからの判定　修正の必要
+          clickEvent.innerHTML = '<div class="Black"></div>';
+        }
+      }
+    }
+  }
 
   function bordCreate(){
     for(let j:number=0;j < 8;j++){
@@ -17,7 +31,7 @@ window.onload = function () {
       bord.appendChild(tr);
       for(let k:number=0;k < 8;k++){
         let td : HTMLElement = document.createElement("td");
-        bord.appendChild(td);
+        tr.appendChild(td);
       }
     }
   }
@@ -32,6 +46,7 @@ window.onload = function () {
     othelloField[4][4] = 1;
     othelloField[4][3] = 2;
     othelloField[3][4] = 2;
+    tarn = 1;
   }
 
   function bordStats(){
@@ -43,13 +58,13 @@ window.onload = function () {
             piece = "";
             break;
           case 1:
-            piece = "●";
+            piece = '<div class="Black"></div>';
             break;
           case 2:
-            piece = "⚪";
+            piece = '<div class="White"></div>';
             break;  
         }
-        bord.rows[x].cells[y].innerText = piece;
+        bord.rows[x].cells[y].innerHTML = piece;
       }
     }
   }
