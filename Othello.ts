@@ -1,5 +1,5 @@
 window.onload = function () { 
-  let tarn:number = 0; //0 = game開始前 白= -1 黒 = 1
+  let tarn:number = 1; //白= -1 黒 = 1
   let tarnCount:number = 0;
   let othelloField:number[][] = new Array(10); // 石なし = 0 白 = -1 黒 = 1
   let directionArray: number[][] = [[-1,-1],[0,-1],[1,-1],[1,0],[1,1],[0,1],[-1,1],[-1,0]];
@@ -28,11 +28,8 @@ window.onload = function () {
     console.log("クリック");
     console.log(clickRow.rowIndex,clickCell.cellIndex);// erroe が発生しているがセルは取れる
     switch(tarn){
-      case 0:
-        console.log("はじまってないよ")
-        break;
       case 1:
-        htmltarn.innerHTML = '<p>黒のターン</p>';
+        htmltarn.innerHTML = '<p>白のターン</p>';
         console.log("黒のターン");
         if(othelloField[clickRow.rowIndex][clickCell.cellIndex] === 0){
           console.log("test");
@@ -40,7 +37,7 @@ window.onload = function () {
         }
         break;
       case -1:
-        htmltarn.innerHTML = '<p>白のターン</p>';
+        htmltarn.innerHTML = '<p>黒のターン</p>';
         console.log("白のターン");
         if(othelloField[clickRow.rowIndex][clickCell.cellIndex] === 0){
           console.log("test");
@@ -122,42 +119,46 @@ window.onload = function () {
 
   function reverse(count:number,direction:number[][],color:number){ //direction は directionArrayの何番目を利用するか
     for(let i = 0;i < count;i++){
-      let reverseArray :number[][] = [[]];
+      let tarnflag = false;
+      let reverseArray :number[][] = [];
       let reverseCount :number = 0;
       let stopFlag : boolean = false;
       let directionNum:number = direction[i][0];
       let directionSpotx:number = direction[i][1];
       let directionSpoty:number = direction[i][2];
       for(let i =1;i<9;i++){
-        console.log("y")
-        console.log(directionSpoty+(directionArray[directionNum][1]*i)); 
-        console.log("x")
-        console.log(directionSpotx+(directionArray[directionNum][0]*i));
         let spotTmp:number = othelloField[directionSpotx+(directionArray[directionNum][0]*i)][directionSpoty+(directionArray[directionNum][1]*i)];
-        console.log("test")
-        console.log(spotTmp);
-        console.log("iro")
-        console.log(color)
+        console.log("spotTmp")
+        console.log(directionSpotx+(directionArray[directionNum][0]*i));
+        console.log(directionSpoty+(directionArray[directionNum][1]*i))
         if(spotTmp == color * -1){
-          reverseArray.push([directionSpotx+(directionArray[directionNum][0]*i)],[directionSpoty+(directionArray[directionNum][1]*i)]);
+          if(reverseCount === 0){
+            reverseArray.push([directionSpotx-(directionArray[directionNum][0]*i),directionSpoty-(directionArray[directionNum][1]*i)])
+            reverseArray.push([directionSpotx,directionSpoty]);
+            reverseCount++;
+          }
+          reverseArray.push([directionSpotx+(directionArray[directionNum][0]*i),directionSpoty+(directionArray[directionNum][1]*i)]);
           reverseCount++;
         }else if(spotTmp == color){
           if(reverseCount === 0){
-            console.log("きてます")
-            console.log("座標1")
             console.log(othelloField[directionSpotx-(directionArray[directionNum][0]*i)][directionSpoty-(directionArray[directionNum][1]*i)]);
             othelloField[directionSpotx-(directionArray[directionNum][0]*i)][directionSpoty-(directionArray[directionNum][1]*i)] = color;
             othelloField[directionSpotx][directionSpoty] = color;
             console.log(othelloField);
             stopFlag = true;
           }else{
-            for(let i =0;i<reverseCount;i++){
-              let tmp:number[] = reverseArray[i]
+            for(let i =0;i<=reverseCount;i++){
+              console.log("count");
+              console.log(reverseCount);
+              let tmp:number[] = reverseArray[i];
               othelloField[tmp[0]][tmp[1]] = color;
-              stopFlag = true;
-              reverseArray = [];
-              reverseCount = 0;
+              console.log("tmp")
+              console.log(tmp[0]);
+              console.log(tmp[1])
             }
+            stopFlag = true;
+            reverseArray = []; 
+            reverseCount = 0;
           }
         }else if(spotTmp == 3 || spotTmp == 0){
           stopFlag = true;
@@ -167,64 +168,10 @@ window.onload = function () {
         if(stopFlag === true){
           break;
         }
+        console.log("一区切り")
       }
     }
     bordStats();
-    tarn = tarn * -1;
+    tarn = tarn * -1; //ひっくり返さなかった場合渡さない処理をかけ
   }
 }
-
-// let numx:number = Number(x);
-// let numy:number = Number(y);
-// let reverseArray :number[][] = [[numx,numy]];
-// let reverseCount :number = 0;
-// let stopFlag : boolean = false;
-// console.log("direction")
-// console.log(direction);
-//     for(let i=1;i<9;i++){
-//       let spotTmp:number = othelloField[numx+(directionArray[direction][0] * i)][numy+(directionArray[direction][1] * i)]; 
-//       console.log("spotTmp");
-//       console.log(spotTmp);
-//       console.log("x");
-//       console.log(numx+(directionArray[direction][0] * i));
-//       console.log("y");
-//       console.log(numy+(directionArray[direction][1] * i));
-//       console.log("color");
-//       console.log(color);
-//       console.log("i");
-//       console.log(i);
-//       if(spotTmp === color * -1){
-//         reverseArray.push([numx+(directionArray[direction][0] * i)],[numy+(directionArray[direction][1] * i)])
-//         reverseCount++;
-//       }else if(spotTmp === color){
-//         if(reverseCount === 0){
-//           console.log("reverseArray[0][1]");
-//           console.log(reverseArray[0][1]);
-//           console.log("色変え位置");
-//           console.log(othelloField[reverseArray[0][0]][reverseArray[0][1]]);
-//           othelloField[numx-(directionArray[direction][0])][numy-(directionArray[direction][1])] = color;
-//           othelloField[reverseArray[0][0]][reverseArray[0][1]] = color;
-//           console.log(othelloField);
-//           stopFlag = true;
-//         }else{
-//           for(let i=0;i<reverseCount;i++){
-//             let tmp:number[] = reverseArray[i]
-//             othelloField[tmp[0]][tmp[1]] = color;
-//           }
-//           stopFlag = true;
-//           reverseArray = [];
-//           reverseCount = 0;
-//         }
-//       }else if(spotTmp === 0 || spotTmp === 3){
-//         stopFlag = true;
-//         reverseArray = [];
-//         reverseCount = 0;
-//       }
-//       if(stopFlag === true){
-//         break;
-//       }
-//     }
-//     console.log("bordStats rev")
-//     console.log("koko");
-//     bordStats();
-// }
