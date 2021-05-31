@@ -29,7 +29,7 @@ window.onload = function () {
     console.log(clickRow.rowIndex, clickCell.cellIndex);// erroe が発生しているがセルは取れる
     switch (tarn) {
       case 1:
-        htmltarn.innerHTML = '<p>白のターン</p>';
+        // htmltarn.innerHTML = '<p>白のターン</p>';
         console.log("黒のターン");
         if (othelloField[clickRow.rowIndex][clickCell.cellIndex] === 0) {
           console.log("test");
@@ -37,7 +37,7 @@ window.onload = function () {
         }
         break;
       case -1:
-        htmltarn.innerHTML = '<p>黒のターン</p>';
+        // htmltarn.innerHTML = '<p>黒のターン</p>';
         console.log("白のターン");
         if (othelloField[clickRow.rowIndex][clickCell.cellIndex] === 0) {
           console.log("test");
@@ -112,9 +112,13 @@ window.onload = function () {
         canPutArray.push([i, x + directionArray[i][0], y + directionArray[i][1]]); //おける方向と座標
       }
     }
-    console.log("canPut のforの中");
+    if(canPutCount > 0){
+      console.log("canPut のforの中");
+      console.log("canPutArray");
+      console.log(canPutArray);
     reverse(canPutCount, canPutArray, color);//発見座標と方向、自身の色を渡す
     console.log("canPutおわり");
+    }
   }
 
   function reverse(count: number, direction: number[][], color: number) { //direction は directionArrayの何番目を利用するか
@@ -133,6 +137,7 @@ window.onload = function () {
         console.log(directionSpoty + (directionArray[directionNum][1] * i));
         if (spotTmp == color * -1) {
           if (reverseCount === 0) {
+            console.log("敵の石")
             reverseArray.push([directionSpotx - (directionArray[directionNum][0] * i), directionSpoty - (directionArray[directionNum][1] * i)]);
             reverseArray.push([directionSpotx, directionSpoty]);
             reverseCount++;
@@ -141,7 +146,7 @@ window.onload = function () {
           reverseCount++;
         } else if (spotTmp == color) {
           if (reverseCount === 0) {
-            console.log(othelloField[directionSpotx - (directionArray[directionNum][0] * i)][directionSpoty - (directionArray[directionNum][1] * i)]);
+            console.log("一個だけひっくり返す")
             othelloField[directionSpotx - (directionArray[directionNum][0] * i)][directionSpoty - (directionArray[directionNum][1] * i)] = color;
             othelloField[directionSpotx][directionSpoty] = color;
             console.log(othelloField);
@@ -149,8 +154,7 @@ window.onload = function () {
             reversed = true;
           } else {
             for (let i = 0; i <= reverseCount; i++) {
-              console.log("count");
-              console.log(reverseCount);
+              console.log("複数個ひっくり返す")
               let tmp: number[] = reverseArray[i];
               othelloField[tmp[0]][tmp[1]] = color;
             }
@@ -160,6 +164,7 @@ window.onload = function () {
             reverseCount = 0;
           }
         } else if (spotTmp == 3 || spotTmp == 0) {
+          console.log("何もひっくり返さない")
           stopFlag = true;
           reverseArray = [];
           reverseCount = 0;
@@ -170,9 +175,17 @@ window.onload = function () {
         console.log("一区切り")
       }
     }
+    console.log("reversed");
+    console.log(reversed);
     if (reversed) {
+      console.log("裏返った気がする");
       bordStats();
       tarn = tarn * -1;
+      if(tarn === -1){
+        htmltarn.innerHTML = '<p>白のターン</p>';
+      }else{
+        htmltarn.innerHTML = '<p>黒のターン</p>';
+      }
     }
   }
 }
